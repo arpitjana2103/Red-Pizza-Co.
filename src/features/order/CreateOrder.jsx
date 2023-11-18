@@ -1,7 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 // https://uibakery.io/regex-library/phone-number
 
-import {Form, redirect} from 'react-router-dom';
+import {Form, redirect, useActionData, useNavigation} from 'react-router-dom';
 import {createOrder} from '../../services/apiRestaurant';
 
 const isValidPhone = (str) =>
@@ -35,6 +35,11 @@ const fakeCart = [
 
 function CreateOrder() {
     // const [withPriority, setWithPriority] = useState(false);
+    const navigation = useNavigation();
+    const isSubmitting = navigation.state === 'submitting';
+
+    const formErrors = useActionData();
+
     const cart = fakeCart;
 
     return (
@@ -52,6 +57,7 @@ function CreateOrder() {
                     <div>
                         <input type="tel" name="phone" required />
                     </div>
+                    {formErrors?.phone && <p>{formErrors.phone}</p>}
                 </div>
 
                 <div>
@@ -80,7 +86,9 @@ function CreateOrder() {
                         name="cart"
                         value={JSON.stringify(cart)}
                     />
-                    <button>Order now</button>
+                    <button disabled={isSubmitting}>
+                        {isSubmitting ? 'Placing Order' : 'Order Now'}
+                    </button>
                 </div>
             </Form>
         </div>
@@ -97,8 +105,14 @@ export async function action({request}) {
         priority: data.priority === 'on',
     };
 
-    const newOrder = await createOrder(order);
+    const errors = {};
+    if (!isValidPhone(order.phone))
+        errors.phone = 'Please give us your correct phone number.';
 
+    if (Object.keys(errors).length > 0) return errors;
+
+    // If everything is okk create New Order !
+    const newOrder = await createOrder(order);
     return redirect(`/order/${newOrder.id}`);
 }
 

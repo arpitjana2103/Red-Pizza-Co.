@@ -65,28 +65,11 @@
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #27272715;
-  display: none;
-}
-
-::-webkit-scrollbar-track:horizontal {
-  background: #fff;
+  background: transparent;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #b4b4b4;
-}
-
-::-webkit-scrollbar-thumb:horizontal {
-  background: rgba(31, 73, 88, 0.1);
-}
-
-::-webkit-scrollbar-thumb:horizontal:hover {
-  background: rgba(31, 73, 88, 0.1);
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-color);
+  /* background: #eab308; */
+  background: #292524;
 }

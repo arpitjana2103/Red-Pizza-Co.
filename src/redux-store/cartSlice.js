@@ -79,3 +79,9 @@ export const getTotalCartQuantity = function (state) {
         return sum + item.quantity;
     }, 0);
 };
+
+export const getTotalCartPrice = function (state) {
+    return state.cart.cart.reduce(function (sum, item) {
+        return sum + item.totalPrice;
+    }, 0);
+};

@@ -6,7 +6,11 @@ export default {
     fontFamily: {
       sans: 'Roboto Mono, monospace',
     },
-    extend: {},
+    extend: {
+      colors: {
+        'theme-red': '#dc2626',
+      },
+    },
   },
   plugins: [],
 };

@@ -4,7 +4,7 @@
 import { Form, redirect, useActionData, useNavigation } from 'react-router-dom';
 import { createOrder } from '../../services/apiRestaurant';
 import Button from '../../ui/Button';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
     clearCart,
     getCart,
@@ -14,6 +14,7 @@ import EmptyCart from '../cart/EmptyCart';
 import store from '../../redux-store/store';
 import { formatCurrency } from '../../utilities/helpers';
 import { useState } from 'react';
+import { fetchAddress } from '../../redux-store/userSlice';
 
 const isValidPhone = (str) =>
     /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/.test(
@@ -24,6 +25,7 @@ function CreateOrder() {
     const [withPriority, setWithPriority] = useState(false);
     const navigation = useNavigation();
     const isSubmitting = navigation.state === 'submitting';
+    const dispatch = useDispatch();
 
     const formErrors = useActionData();
 
@@ -32,9 +34,16 @@ function CreateOrder() {
     const totalCartPrice = useSelector(getTotalCartPrice);
     const priorityPrice = withPriority ? totalCartPrice * 0.2 : 0;
 
-    const username = useSelector(function (state) {
-        return state.user.username;
+    const {
+        username,
+        status: addressStatus,
+        position,
+        address,
+    } = useSelector(function (state) {
+        return state.user;
     });
+
+    const isLodingAddress = addressStatus === 'loading';
 
     if (!cart.length) return <EmptyCart />;
 
@@ -73,16 +82,31 @@ function CreateOrder() {
                     </div>
                 </div>
 
-                <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-center">
+                <div className="relative mb-5 flex flex-col gap-2 sm:flex-row sm:items-center">
                     <label className="sm:basis-40">Address</label>
                     <div className="grow">
                         <input
                             className="input w-full"
                             type="text"
                             name="address"
+                            disabled={isLodingAddress}
+                            defaultValue={address}
                             required
                         />
                     </div>
+
+                    <span className="absolute right-[5px]">
+                        <Button
+                            type="small"
+                            disabled={isLodingAddress}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                dispatch(fetchAddress());
+                            }}
+                        >
+                            Get Position
+                        </Button>
+                    </span>
                 </div>
 
                 <div className="mb-12 flex items-center gap-5">

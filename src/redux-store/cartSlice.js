@@ -54,13 +54,14 @@ const cartSlice = createSlice({
                     return item.pizzaId === action.payload;
                 });
                 item.quantity--;
-                if (item.quantity === 0) {
-                    state.cart.filter(function (pizza) {
-                        return pizza.pizzaId !== item.pizzaId;
-                    });
-                    return;
-                }
                 item.totalPrice = item.quantity * item.unitPrice;
+
+                if (item.quantity === 0) {
+                    // state.cart = state.cart.filter(function (pizza) {
+                    //     return pizza.pizzaId !== item.pizzaId;
+                    // });
+                    cartSlice.caseReducers.deleteItem(state, action);
+                }
             },
         },
         clearCart: {

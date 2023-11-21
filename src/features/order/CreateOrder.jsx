@@ -107,7 +107,7 @@ function CreateOrder() {
                     />
                     <Button type="primary" disabled={isSubmitting}>
                         {isSubmitting
-                            ? 'Placing Order'
+                            ? 'Placing Order...'
                             : `Order Now ${formatCurrency(
                                   totalCartPrice + priorityPrice,
                               )}`}

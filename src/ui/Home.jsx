@@ -1,11 +1,14 @@
 import { useSelector } from 'react-redux';
 import CreateUser from '../features/user/CreateUser';
 import Button from './Button';
+import { getTotalCartQuantity } from '../redux-store/cartSlice';
 
 function Home() {
     const username = useSelector(function (state) {
         return state.user.username;
     });
+
+    const cartQunatity = useSelector(getTotalCartQuantity);
 
     return (
         <div className="my-10 px-4 text-center sm:my-16">
@@ -17,9 +20,12 @@ function Home() {
                 </span>
             </h1>
             {username === '' ? (
-                <CreateUser />
+                <CreateUser haveCart={cartQunatity > 0} />
             ) : (
-                <Button to="/menu" type="primary">
+                <Button
+                    to={cartQunatity > 0 ? '/cart' : '/menu'}
+                    type="primary"
+                >
                     Continue Ordering, {username}{' '}
                     <span className="emoji-txt">🤤</span>
                 </Button>

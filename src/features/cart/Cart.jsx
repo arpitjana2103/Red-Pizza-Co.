@@ -8,6 +8,8 @@ import {
     getTotalCartQuantity,
 } from '../../redux-store/cartSlice';
 import EmptyCart from './EmptyCart';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 function Cart() {
     const cart = useSelector(getCart);
@@ -16,6 +18,14 @@ function Cart() {
     });
     const dispatch = useDispatch();
     const totalCartQuantity = useSelector(getTotalCartQuantity);
+    const navigate = useNavigate();
+
+    useEffect(
+        function () {
+            if (!username) navigate('/');
+        },
+        [username, navigate],
+    );
 
     if (!totalCartQuantity) return <EmptyCart />;
 

@@ -39,6 +39,7 @@ function CreateOrder() {
         status: addressStatus,
         position,
         address,
+        error: errorAddress,
     } = useSelector(function (state) {
         return state.user;
     });
@@ -93,20 +94,27 @@ function CreateOrder() {
                             defaultValue={address}
                             required
                         />
+                        {errorAddress && (
+                            <p className="mt-2 rounded-md bg-red-100 p-2 text-xs text-red-700">
+                                {errorAddress}
+                            </p>
+                        )}
                     </div>
 
-                    <span className="absolute right-[5px]">
-                        <Button
-                            type="small"
-                            disabled={isLodingAddress}
-                            onClick={(e) => {
-                                e.preventDefault();
-                                dispatch(fetchAddress());
-                            }}
-                        >
-                            Get Position
-                        </Button>
-                    </span>
+                    {!position.latitude && !position.longitude && (
+                        <span className="absolute right-[3px] top-[35px] sm:top-[3px] md:top-[5px]">
+                            <Button
+                                type="small"
+                                disabled={isLodingAddress}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    dispatch(fetchAddress());
+                                }}
+                            >
+                                Get Position
+                            </Button>
+                        </span>
+                    )}
                 </div>
 
                 <div className="mb-12 flex items-center gap-5">
@@ -129,7 +137,19 @@ function CreateOrder() {
                         name="cart"
                         value={JSON.stringify(cart)}
                     />
-                    <Button type="primary" disabled={isSubmitting}>
+                    <input
+                        type="hidden"
+                        name="position"
+                        value={
+                            position.longitude
+                                ? `${position.latitude}, ${position.longitude}`
+                                : ''
+                        }
+                    />
+                    <Button
+                        type="primary"
+                        disabled={isSubmitting || isLodingAddress}
+                    >
                         {isSubmitting
                             ? 'Placing Order...'
                             : `Order Now ${formatCurrency(

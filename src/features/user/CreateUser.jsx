@@ -1,10 +1,11 @@
+/* eslint-disable react/prop-types */
 import { useState } from 'react';
 import Button from '../../ui/Button';
 import { useDispatch } from 'react-redux';
 import { updateName } from '../../redux-store/userSlice';
 import { useNavigate } from 'react-router-dom';
 
-function CreateUser() {
+function CreateUser({ haveCart }) {
     const [username, setUsername] = useState('');
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -13,7 +14,8 @@ function CreateUser() {
         e.preventDefault();
         if (!username) return;
         dispatch(updateName(username));
-        navigate('/menu');
+
+        navigate(haveCart ? '/cart' : '/menu');
     }
 
     return (
@@ -33,7 +35,10 @@ function CreateUser() {
 
             {username && (
                 <div>
-                    <Button type="primary">Start ordering</Button>
+                    <Button type="primary">
+                        {' '}
+                        {haveCart ? 'Continue Ordering' : 'Visit Menu'}
+                    </Button>
                 </div>
             )}
         </form>

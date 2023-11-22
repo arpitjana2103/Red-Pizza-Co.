@@ -22,12 +22,12 @@ function CreateUser({ haveCart }) {
         <form onSubmit={handleSubmit}>
             <p className="mb-4 text-sm text-stone-600 md:text-base">
                 <span className="emoji-txt">👋</span> Welcome! Please start by
-                telling us your name:
+                telling us your name,
             </p>
 
             <input
                 type="text"
-                placeholder="Your full name"
+                placeholder="Enter Your Name"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 className="input mb-8 w-72"

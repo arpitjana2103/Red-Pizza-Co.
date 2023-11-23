@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { formatCurrency } from '../../utilities/helpers';
 import DeleteItem from './DeleteItem';
-import UpdateItemQunatity from './updateItemQunatity';
+import UpdateItemQunatity from './UpdateItemQunatity';
 
 function CartItem({ item }) {
     const { pizzaId, name, quantity, totalPrice } = item;
